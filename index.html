@@ -5,7 +5,7 @@
   <meta name="description" content="Kangaroo project page.">
   <meta name="keywords" content="Kangaroo, Pose-to-Video, Video Generation">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kangaroo</title>
+  <title>Kangaroo: Text-to-Skeleton Cascades for Controllable Complex Human Motion Video Generation</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
@@ -67,21 +67,21 @@
 
     /* Video wrapper (no forced black margins) */
     .video-wrap{
-      background: transparent;     /* was black */
+      background: transparent;
       display:flex;
       justify-content:center;
-      padding: 0;                 /* keep tight */
+      padding: 0;
     }
 
     /* Fit full tall video within screen height */
     .gallery-video{
-      width: auto;                /* don't stretch */
+      width: auto;
       max-width: 100%;
       height: auto;
-      max-height: 80vh;           /* fit in screen */
-      object-fit: contain;        /* no crop */
+      max-height: 80vh;
+      object-fit: contain;
       display:block;
-      background: transparent;    /* was black */
+      background: transparent;
     }
   </style>
 </head>
@@ -94,7 +94,9 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
 
-          <h1 class="title is-1 publication-title">Kangaroo</h1>
+          <h1 class="title is-1 publication-title">
+            Kangaroo: Text-to-Skeleton Cascades for Controllable Complex Human Motion Video Generation
+          </h1>
 
           <div class="is-size-5 publication-authors">
             <span class="author-block">Ashkan Taghipour<sup>1</sup>,</span>
@@ -144,20 +146,6 @@
   </div>
 </section>
 
-<!-- Keep teaser block for now -->
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4" type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into free-viewpoint portraits.
-      </h2>
-    </div>
-  </div>
-</section>
-
 <!-- Abstract -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -165,7 +153,24 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>[Template placeholder] Replace this paragraph with your abstract.</p>
+          <p>
+            Modern video diffusion models produce impressive results for text-to-video and image-to-video generation,
+            yet they still struggle with complex, highly dynamic human motions such as flips, cartwheels, acrobatics,
+            and martial arts. These motions are non-repetitive, involve large pose changes and frequent self-occlusions,
+            and often trigger failure modes including implausible limb trajectories, temporal inconsistency, and identity
+            drift, particularly when the input is a reference image and appearance preservation is essential. To address
+            these challenges, we propose a two-stage cascaded framework that treats language as a high-level motion prior
+            rather than a weak global control signal. In the first stage, an autoregressive text-to-skeleton model
+            translates a natural-language description into a temporally coherent sequence of 2D poses by predicting each
+            frame conditioned on previous poses and the text, capturing long-range dependencies and physically plausible
+            trajectories without manual pose authoring. In the second stage, a pose-conditioned video diffusion model
+            synthesizes videos from a reference image and the generated skeleton sequence, using a DiNOv3-based multi-level
+            reference encoder with learnable feature fusion to better preserve identity and clothing details under large
+            pose variations. Finally, to enable rigorous training and evaluation in this regime, we introduce an ethically
+            sourced Blender-based synthetic dataset of 2,000 videos spanning diverse acrobatic and stunt-like actions,
+            characters, and environments. Extensive experiments demonstrate improved motion fidelity, temporal consistency,
+            and identity preservation for complex human motion generation.
+          </p>
         </div>
       </div>
     </div>
