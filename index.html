@@ -41,28 +41,47 @@
       font-weight: 600;
     }
 
+    /* --- Gallery layout tweaks to remove side black margins --- */
+
+    /* Center items in the gallery row */
+    #result-gallery {
+      justify-content: center;
+    }
+
+    /* Each column centers its card */
+    .gallery-col {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Shrink-wrap card to content (video width) so no extra side space */
     .gallery-card {
       border-radius: 14px;
       overflow: hidden;
       background: #fff;
       box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      display: inline-block;
+      width: fit-content;
+      max-width: 100%;
     }
 
-    /* NO SCROLLBAR: show full tall video (page will be tall, which is expected) */
-
+    /* Video wrapper (no forced black margins) */
     .video-wrap{
-    background:#000;
-    display:flex;
-    justify-content:center;
+      background: transparent;     /* was black */
+      display:flex;
+      justify-content:center;
+      padding: 0;                 /* keep tight */
     }
+
+    /* Fit full tall video within screen height */
     .gallery-video{
-      width:auto;          /* don't force it to full width */
-      max-width:100%;
-      height:auto;
-      max-height:80vh;     /* fit in screen */
-      object-fit:contain;  /* no crop */
+      width: auto;                /* don't stretch */
+      max-width: 100%;
+      height: auto;
+      max-height: 80vh;           /* fit in screen */
+      object-fit: contain;        /* no crop */
       display:block;
-      background:#000;
+      background: transparent;    /* was black */
     }
   </style>
 </head>
@@ -225,7 +244,7 @@
       const src = `./static/pose_to_video/${fn}`;
 
       const col = document.createElement("div");
-      col.className = "column is-half"; // change to "column is-full" for bigger videos
+      col.className = "column is-half gallery-col";
 
       col.innerHTML = `
         <div class="gallery-card">
