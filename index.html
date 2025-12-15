@@ -49,16 +49,20 @@
     }
 
     /* NO SCROLLBAR: show full tall video (page will be tall, which is expected) */
-    .video-wrap {
-      overflow: visible;
-      background: #000;
+
+    .video-wrap{
+    background:#000;
+    display:flex;
+    justify-content:center;
     }
-    .gallery-video {
-      width: 100%;
-      height: auto;          /* preserves vertical aspect */
-      display: block;
-      object-fit: contain;
-      background: #000;
+    .gallery-video{
+      width:auto;          /* don't force it to full width */
+      max-width:100%;
+      height:auto;
+      max-height:80vh;     /* fit in screen */
+      object-fit:contain;  /* no crop */
+      display:block;
+      background:#000;
     }
   </style>
 </head>
