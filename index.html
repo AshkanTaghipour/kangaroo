@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
 
-  <!-- Bring this back so icons render reliably like the original Nerfies template -->
+  <!-- FontAwesome icons (as in Nerfies template) -->
   <script defer src="./static/js/fontawesome.all.min.js"></script>
 
   <style>
@@ -47,22 +47,15 @@
       background: #fff;
       box-shadow: 0 6px 18px rgba(0,0,0,0.06);
     }
-    .gallery-card .titlebar {
-      padding: 0.75rem 0.9rem;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      font-weight: 600;
-    }
 
-    /* KEY: tall videos (832x2400) should not look “landscape”.
-       We keep width=100%, but we cap height and allow scrolling inside the card. */
+    /* NO SCROLLBAR: show full tall video (page will be tall, which is expected) */
     .video-wrap {
-      max-height: 70vh;
-      overflow: auto;
+      overflow: visible;
       background: #000;
     }
     .gallery-video {
       width: 100%;
-      height: auto;
+      height: auto;          /* preserves vertical aspect */
       display: block;
       object-fit: contain;
       background: #000;
@@ -95,7 +88,6 @@
             <span class="author-block"><sup>3</sup>Murdoch University</span>
           </div>
 
-          <!-- Links (icons restored + arXiv coming soon) -->
           <div class="column has-text-centered">
             <div class="publication-links">
 
@@ -157,7 +149,7 @@
   </div>
 </section>
 
-<!-- Method (PNG diagrams) -->
+<!-- Method -->
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
@@ -179,13 +171,12 @@
   </div>
 </section>
 
-<!-- Result Gallery (NO filters, just the grid) -->
+<!-- Result Gallery -->
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Result Gallery</h2>
-        <p class="muted-note">Videos are served from <code>static/pose_to_video/</code>.</p>
 
         <div id="gallery-status" class="content has-text-centered"></div>
         <div class="columns is-multiline" id="result-gallery"></div>
@@ -195,7 +186,6 @@
 </section>
 
 <script>
-  // Your exact filenames (flat folder)
   const VIDEO_FILES = [
     "Armada_unified_video_elon.mp4",
     "Armada_unified_video_messi.mp4",
@@ -215,18 +205,6 @@
     "spine_flip_unified_video_trump.mp4"
   ];
 
-  function titleize(s) {
-    return s.replace(/_/g, " ").replace(/\s+/g, " ").trim();
-  }
-
-  function labelFromFilename(fn) {
-    const base = fn.replace(/\.mp4$/i, "");
-    const parts = base.split("_unified_video_");
-    const motion = parts[0] || "unknown";
-    const person = parts[1] || "unknown";
-    return `${titleize(motion)} — ${titleize(person)}`;
-  }
-
   function renderGallery() {
     const status = document.getElementById("gallery-status");
     const gallery = document.getElementById("result-gallery");
@@ -241,14 +219,12 @@
 
     for (const fn of VIDEO_FILES) {
       const src = `./static/pose_to_video/${fn}`;
-      const label = labelFromFilename(fn);
 
       const col = document.createElement("div");
-      col.className = "column is-half"; // two per row on desktop
+      col.className = "column is-half"; // change to "column is-full" for bigger videos
 
       col.innerHTML = `
         <div class="gallery-card">
-          <div class="titlebar">${label}</div>
           <div class="video-wrap">
             <video class="gallery-video" controls playsinline preload="metadata">
               <source src="${src}" type="video/mp4">
