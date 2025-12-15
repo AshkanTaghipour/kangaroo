@@ -8,13 +8,17 @@
   <title>Kangaroo</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
 
+  <!-- Bring this back so icons render reliably like the original Nerfies template -->
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+
   <style>
-    /* Clean extras for diagrams + tall unified videos */
     .muted-note { color: rgba(0,0,0,0.65); font-size: 0.95rem; }
     .btn-placeholder { cursor: default; opacity: 0.92; }
 
@@ -48,24 +52,20 @@
       border-bottom: 1px solid rgba(0,0,0,0.06);
       font-weight: 600;
     }
+
+    /* KEY: tall videos (832x2400) should not look “landscape”.
+       We keep width=100%, but we cap height and allow scrolling inside the card. */
+    .video-wrap {
+      max-height: 70vh;
+      overflow: auto;
+      background: #000;
+    }
     .gallery-video {
       width: 100%;
-      max-height: 70vh; /* important for 832x2400 videos */
+      height: auto;
+      display: block;
       object-fit: contain;
       background: #000;
-      display: block;
-    }
-
-    .controls-row {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-    .control {
-      min-width: 220px;
     }
   </style>
 </head>
@@ -80,7 +80,6 @@
 
           <h1 class="title is-1 publication-title">Kangaroo</h1>
 
-          <!-- Authors -->
           <div class="is-size-5 publication-authors">
             <span class="author-block">Ashkan Taghipour<sup>1</sup>,</span>
             <span class="author-block">Morteza Ghahremani<sup>2</sup>,</span>
@@ -90,16 +89,22 @@
             <span class="author-block">Mohammed Bennamoun<sup>1</sup></span>
           </div>
 
-          <!-- Affiliations (university names only) -->
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>The University of Western Australia</span>
             <span class="author-block"><sup>2</sup>Technical University of Munich</span>
             <span class="author-block"><sup>3</sup>Murdoch University</span>
           </div>
 
-          <!-- Links: remove Paper/Video; show placeholders -->
+          <!-- Links (icons restored + arXiv coming soon) -->
           <div class="column has-text-centered">
             <div class="publication-links">
+
+              <span class="link-block">
+                <span class="external-link button is-normal is-rounded is-dark btn-placeholder">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv (coming soon)</span>
+                </span>
+              </span>
 
               <span class="link-block">
                 <span class="external-link button is-normal is-rounded is-dark btn-placeholder">
@@ -145,9 +150,7 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>
-            [Template placeholder] Replace this paragraph with your abstract.
-          </p>
+          <p>[Template placeholder] Replace this paragraph with your abstract.</p>
         </div>
       </div>
     </div>
@@ -160,7 +163,6 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Method</h2>
-        <p class="muted-note">Diagrams are loaded as PNG from <code>static/diagrams/</code>.</p>
 
         <div class="diagram-card">
           <img src="./static/diagrams/motion_diagram.png" alt="Motion diagram">
@@ -177,54 +179,23 @@
   </div>
 </section>
 
-<!-- Result Gallery -->
+<!-- Result Gallery (NO filters, just the grid) -->
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Result Gallery</h2>
-        <p class="muted-note">
-          Videos are loaded from <code>static/pose_to_video/</code>. (Flat folder, no manifest.)
-        </p>
+        <p class="muted-note">Videos are served from <code>static/pose_to_video/</code>.</p>
 
-        <!-- Simple filters (optional but handy) -->
-        <div class="controls-row">
-          <div class="control">
-            <div class="select is-fullwidth">
-              <select id="filter-motion">
-                <option value="all">All motions</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="control">
-            <div class="select is-fullwidth">
-              <select id="filter-person">
-                <option value="all">All identities</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div id="gallery-status" class="content has-text-centered">Loading videos…</div>
+        <div id="gallery-status" class="content has-text-centered"></div>
         <div class="columns is-multiline" id="result-gallery"></div>
       </div>
     </div>
   </div>
 </section>
 
-<footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <p class="muted-note">
-        Website template borrowed from Nerfies (<a href="https://github.com/nerfies/nerfies.github.io">source</a>).
-      </p>
-    </div>
-  </div>
-</footer>
-
 <script>
-  // ---- Put your filenames here (flat folder: static/pose_to_video/) ----
+  // Your exact filenames (flat folder)
   const VIDEO_FILES = [
     "Armada_unified_video_elon.mp4",
     "Armada_unified_video_messi.mp4",
@@ -248,97 +219,52 @@
     return s.replace(/_/g, " ").replace(/\s+/g, " ").trim();
   }
 
-  function parseFile(fn) {
-    // Expected: <motion>_unified_video_<person>.mp4
+  function labelFromFilename(fn) {
     const base = fn.replace(/\.mp4$/i, "");
     const parts = base.split("_unified_video_");
     const motion = parts[0] || "unknown";
     const person = parts[1] || "unknown";
-    return { fn, motion, person };
+    return `${titleize(motion)} — ${titleize(person)}`;
   }
 
-  const items = VIDEO_FILES.map(parseFile)
-    .sort((a,b) => (a.motion + "_" + a.person).localeCompare(b.motion + "_" + b.person));
-
-  function uniqueSorted(arr) {
-    return Array.from(new Set(arr)).sort((a,b) => a.localeCompare(b));
-  }
-
-  function setOptions(selectEl, values, allLabel) {
-    // keep first option as-is, then add others
-    const keep = selectEl.options[0];
-    selectEl.innerHTML = "";
-    selectEl.appendChild(keep);
-    keep.textContent = allLabel;
-    keep.value = "all";
-    for (const v of values) {
-      const opt = document.createElement("option");
-      opt.value = v;
-      opt.textContent = titleize(v);
-      selectEl.appendChild(opt);
-    }
-  }
-
-  function render() {
+  function renderGallery() {
     const status = document.getElementById("gallery-status");
     const gallery = document.getElementById("result-gallery");
-    const selMotion = document.getElementById("filter-motion").value;
-    const selPerson = document.getElementById("filter-person").value;
 
-    gallery.innerHTML = "";
-
-    const filtered = items.filter(it => {
-      const okMotion = (selMotion === "all") || (it.motion === selMotion);
-      const okPerson = (selPerson === "all") || (it.person === selPerson);
-      return okMotion && okPerson;
-    });
-
-    if (filtered.length === 0) {
-      status.textContent = "No videos match the current filters.";
+    if (!VIDEO_FILES.length) {
+      status.textContent = "No videos configured.";
       return;
     }
 
     status.textContent = "";
+    gallery.innerHTML = "";
 
-    for (const it of filtered) {
-      const src = `./static/pose_to_video/${it.fn}`;
-      const label = `${titleize(it.motion)} — ${titleize(it.person)}`;
+    for (const fn of VIDEO_FILES) {
+      const src = `./static/pose_to_video/${fn}`;
+      const label = labelFromFilename(fn);
 
       const col = document.createElement("div");
-      col.className = "column is-half";
+      col.className = "column is-half"; // two per row on desktop
+
       col.innerHTML = `
         <div class="gallery-card">
           <div class="titlebar">${label}</div>
-          <video class="gallery-video" controls muted playsinline preload="metadata">
-            <source src="${src}" type="video/mp4">
-          </video>
+          <div class="video-wrap">
+            <video class="gallery-video" controls playsinline preload="metadata">
+              <source src="${src}" type="video/mp4">
+            </video>
+          </div>
           <div class="content" style="padding: 0.6rem 0.9rem;">
             <a href="${src}" target="_blank" rel="noopener">Open video</a>
           </div>
         </div>
       `;
+
       gallery.appendChild(col);
     }
   }
 
-  (function init() {
-    const status = document.getElementById("gallery-status");
-    const selMotion = document.getElementById("filter-motion");
-    const selPerson = document.getElementById("filter-person");
-
-    if (!VIDEO_FILES.length) {
-      status.textContent = "No videos configured yet.";
-      return;
-    }
-
-    setOptions(selMotion, uniqueSorted(items.map(x => x.motion)), "All motions");
-    setOptions(selPerson, uniqueSorted(items.map(x => x.person)), "All identities");
-
-    selMotion.addEventListener("change", render);
-    selPerson.addEventListener("change", render);
-
-    render();
-  })();
+  renderGallery();
 </script>
 
 </body>
