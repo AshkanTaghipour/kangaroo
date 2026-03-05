@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="./static/images/favicon.svg?v=2">
 
   <!-- FontAwesome icons (as in Nerfies template) -->
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -154,22 +154,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Modern video diffusion models produce impressive results for text-to-video and image-to-video generation,
-            yet they still struggle with complex, highly dynamic human motions such as flips, cartwheels, acrobatics,
-            and martial arts. These motions are non-repetitive, involve large pose changes and frequent self-occlusions,
-            and often trigger failure modes including implausible limb trajectories, temporal inconsistency, and identity
-            drift, particularly when the input is a reference image and appearance preservation is essential. To address
-            these challenges, we propose a two-stage cascaded framework that treats language as a high-level motion prior
-            rather than a weak global control signal. In the first stage, an autoregressive text-to-skeleton model
-            translates a natural-language description into a temporally coherent sequence of 2D poses by predicting each
-            frame conditioned on previous poses and the text, capturing long-range dependencies and physically plausible
-            trajectories without manual pose authoring. In the second stage, a pose-conditioned video diffusion model
-            synthesizes videos from a reference image and the generated skeleton sequence, using a DiNOv3-based multi-level
-            reference encoder with learnable feature fusion to better preserve identity and clothing details under large
-            pose variations. Finally, to enable rigorous training and evaluation in this regime, we introduce an ethically
-            sourced Blender-based synthetic dataset of 2,000 videos spanning diverse acrobatic and stunt-like actions,
-            characters, and environments. Extensive experiments demonstrate improved motion fidelity, temporal consistency,
-            and identity preservation for complex human motion generation.
+            Generating videos of complex human motions&mdash;such as flips, cartwheels, and martial arts&mdash;remains challenging for current video diffusion models. Text-only conditioning is temporally ambiguous for fine-grained motion control, while explicit pose-based controls, though effective, require users to supply complete skeleton sequences that are costly to generate for long, dynamic actions. We propose a two-stage cascaded framework that addresses both limitations. First, an autoregressive text-to-skeleton model generates 2D pose sequences from natural language descriptions, predicting each joint conditioned on previously generated poses to capture long-range temporal dependencies and inter-joint coordination in complex motions. Second, a pose-conditioned video diffusion model synthesizes videos from a reference image and the generated skeleton sequence, employing DiNO-ALF (Adaptive Layer Fusion), a multi-level reference encoder that preserves appearance and clothing details under large pose changes and self-occlusions. To address the lack of publicly available datasets for complex human motion video generation, we introduce a Blender-based synthetic dataset of 2,000 videos featuring diverse characters performing acrobatic and stunt-like motions, providing full control over appearance, motion, and environment. This dataset fills a critical gap, as existing benchmarks severely under-represent acrobatic and stunt-like motions, while also avoiding the copyright and privacy concerns of web-collected data. Experiments on our proposed synthetic dataset and the Motion-X Fitness benchmark demonstrated that our text-to-skeleton model outperformed prior methods on FID, R-precision, and motion diversity, while our pose-to-video model achieved the best results among all compared methods on VBench metrics for temporal consistency, motion smoothness, and subject preservation.
           </p>
         </div>
       </div>
